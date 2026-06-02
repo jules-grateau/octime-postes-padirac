@@ -1,75 +1,125 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OCTIME – Postes par jour</title>
+<title>Postes / jour — Guide d'installation</title>
 <style>
- body{font:16px/1.5 system-ui,Arial,sans-serif;max-width:760px;margin:0 auto;padding:24px;color:#1a202c}
- h1{font-size:22px} h2{font-size:17px;margin-top:28px}
- .drag{display:inline-block;background:#2b6cb0;color:#fff;text-decoration:none;padding:14px 24px;border-radius:24px;font-weight:700;box-shadow:0 2px 6px rgba(0,0,0,.25);font-size:18px}
- .drag[href="#"]{opacity:.45;cursor:default}
- .box{background:#f7fafc;border:1px solid #cbd5e0;border-radius:8px;padding:12px;margin:12px 0}
- textarea{width:100%;height:90px;font:12px/1.4 monospace;border:1px solid #cbd5e0;border-radius:6px;padding:8px;box-sizing:border-box}
- button{background:#2b6cb0;color:#fff;border:none;border-radius:6px;padding:8px 14px;font-weight:600;cursor:pointer}
- ol{padding-left:20px} li{margin:6px 0} code{background:#edf2f7;padding:1px 5px;border-radius:4px}
- .note{color:#4a5568;font-size:14px}
- .erreur{color:#c53030;font-size:14px}
-</style></head>
+  *{box-sizing:border-box}
+  body{font:16px/1.6 system-ui,Arial,sans-serif;margin:0;background:#f7fafc;color:#1a202c}
+  .hero{background:#2b6cb0;color:#fff;padding:32px 24px;text-align:center}
+  .hero h1{margin:0 0 8px;font-size:26px}
+  .hero p{margin:0;opacity:.88;font-size:15px}
+  .container{max-width:680px;margin:0 auto;padding:24px 16px 48px}
+  h2{font-size:18px;margin:32px 0 12px;display:flex;align-items:center;gap:8px}
+  .num{background:#2b6cb0;color:#fff;border-radius:50%;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+  .card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px 20px;margin-bottom:16px}
+  .card p{margin:0 0 8px}
+  .card p:last-child{margin:0}
+  .drag{display:inline-block;background:#2b6cb0;color:#fff;text-decoration:none;padding:12px 22px;border-radius:24px;font-weight:700;box-shadow:0 2px 6px rgba(0,0,0,.25);font-size:16px;cursor:grab}
+  .drag[href="#"]{opacity:.45;cursor:default}
+  .drag-zone{background:#ebf4ff;border:2px dashed #90cdf4;border-radius:8px;padding:16px;text-align:center;margin:12px 0}
+  textarea{width:100%;height:80px;font:12px/1.4 monospace;border:1px solid #cbd5e0;border-radius:6px;padding:8px;resize:none}
+  button{background:#2b6cb0;color:#fff;border:none;border-radius:6px;padding:8px 16px;font-weight:600;cursor:pointer;font-size:14px}
+  .steps{list-style:none;padding:0;margin:0}
+  .steps li{padding:8px 0 8px 36px;position:relative;border-bottom:1px solid #f0f0f0}
+  .steps li:last-child{border:none}
+  .steps li::before{content:attr(data-n);position:absolute;left:0;top:9px;background:#e2e8f0;color:#4a5568;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+  a.lien-octime{color:#2b6cb0;font-weight:600}
+  .note{font-size:13px;color:#718096;margin-top:6px}
+  .badge{display:inline-block;background:#edf2f7;border-radius:4px;padding:1px 7px;font-size:13px;font-weight:600}
+  details{margin-top:12px}
+  summary{cursor:pointer;color:#4a5568;font-size:14px}
+  #statut{font-size:13px;color:#2b6cb0;margin-top:6px;min-height:18px}
+  #statut.erreur{color:#c53030}
+</style>
+</head>
 <body>
-<h1>OCTIME – Favori « Postes / jour »</h1>
-<p>Le code est intégré directement dans le favori à chaque chargement de cette page.
-Quand <code>octime-postes.js</code> est mis à jour, il suffit de <strong>recharger cette page</strong>
-et de réinstaller le favori pour avoir la version à jour.</p>
 
-<h2>Sur ordinateur — glisse ce bouton dans la barre des favoris</h2>
-<p><a class="drag" id="drag" href="#">Postes / jour</a></p>
-<p class="note" id="statut">Chargement du code…</p>
-<p class="note">Affiche la barre des favoris avec <code>Ctrl+Maj+B</code> si besoin, puis va sur ton planning OCTIME et clique le favori.</p>
-
-<h2>Sur téléphone — copie le code et colle-le comme adresse d'un favori</h2>
-<div class="box">
-  <textarea id="code" readonly placeholder="Chargement…"></textarea>
-  <button id="copy">Copier le code</button>
+<div class="hero">
+  <h1>Postes / jour</h1>
+  <p>Voir en un clic qui est sur quel poste chaque jour du mois</p>
 </div>
-<ol>
- <li>Crée un favori (par ex. ajoute la page actuelle aux favoris).</li>
- <li>Modifie-le : nomme-le <strong>Postes/jour</strong> et remplace son adresse par le code copié.</li>
- <li>Sur OCTIME, tape <strong>Postes/jour</strong> dans la barre d'adresse et choisis le favori.</li>
-</ol>
 
-<h2>Bon à savoir</h2>
-<ul>
- <li>Le favori est <strong>autonome</strong> : il ne charge aucun script externe et fonctionne même si OCTIME bloque les ressources tierces (CSP).</li>
- <li>Pour mettre à jour : recharge cette page, puis réinstalle le favori (glisser-déposer ou copier-coller).</li>
- <li>Fonctionne sur Chrome, Edge, Firefox, Safari (ordi et mobile).</li>
-</ul>
+<div class="container">
+
+  <h2><span class="num">1</span> Installe le favori <em>(une seule fois)</em></h2>
+
+  <div class="card">
+    <p><strong>Sur ordinateur</strong> — fais glisser ce bouton dans ta barre de favoris&nbsp;:</p>
+    <div class="drag-zone">
+      <a class="drag" id="drag" href="#">Postes / jour</a>
+      <p class="note" id="statut">Chargement…</p>
+      <p class="note">Si la barre des favoris n'est pas visible, appuie sur <strong>Ctrl + Maj + B</strong></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <p><strong>Sur téléphone</strong> — copie ce code et colle-le dans l'adresse d'un favori&nbsp;:</p>
+    <textarea id="code" readonly placeholder="Chargement…"></textarea>
+    <button id="copy" style="margin-top:8px">Copier le code</button>
+    <details>
+      <summary>Comment créer un favori sur téléphone ?</summary>
+      <ol style="margin:8px 0 0;padding-left:20px;font-size:14px">
+        <li>Ouvre cette page dans ton navigateur et ajoute-la aux favoris.</li>
+        <li>Ouvre tes favoris, appuie longtemps sur le favori que tu viens de créer, puis <strong>Modifier</strong>.</li>
+        <li>Remplace l'adresse par le code copié ci-dessus. Sauvegarde.</li>
+        <li>Pour l'utiliser : sur OCTIME, tape <strong>Postes</strong> dans la barre d'adresse et choisis ce favori.</li>
+      </ol>
+    </details>
+  </div>
+
+  <h2><span class="num">2</span> Utilise-le chaque fois</h2>
+
+  <div class="card">
+    <ul class="steps">
+      <li data-n="1">
+        Va sur OCTIME : <a class="lien-octime" href="https://saas-g-de-padirac.octime-expresso.com/weoctime?INI=g-de-padirac" target="_blank">ouvrir OCTIME</a> et connecte-toi.
+      </li>
+      <li data-n="2">
+        Dans le menu, ouvre le <strong>Planning de service</strong> (vue mensuelle).
+      </li>
+      <li data-n="3">
+        Clique sur le favori <span class="badge">Postes / jour</span> dans ta barre de favoris.
+      </li>
+      <li data-n="4">
+        Un panneau s'ouvre avec deux onglets&nbsp;:
+        <ul style="margin:6px 0 0;padding-left:16px;font-size:14px">
+          <li><strong>Par poste</strong> — pour un jour donné, voir tous les collègues regroupés par poste.</li>
+          <li><strong>Résumé</strong> — pour un employé, voir tous ses postes du mois et ses jours travaillés.</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <p class="note" style="text-align:center;margin-top:24px">
+    Outil interne SES Padirac — Batellerie
+  </p>
+
+</div>
 
 <script>
-var drag = document.getElementById("drag");
-var code = document.getElementById("code");
-var statut = document.getElementById("statut");
-var copyBtn = document.getElementById("copy");
+var drag=document.getElementById("drag");
+var code=document.getElementById("code");
+var statut=document.getElementById("statut");
+var copyBtn=document.getElementById("copy");
 
-fetch("octime-postes.js?v=" + Date.now())
-  .then(function(r){
-    if(!r.ok) throw new Error("HTTP " + r.status);
-    return r.text();
-  })
+fetch("octime-postes.js?v="+Date.now())
+  .then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.text();})
   .then(function(js){
-    var bm = "javascript:" + encodeURIComponent(js.trim());
-    drag.href = bm;
-    code.value = bm;
-    statut.textContent = "Prêt — glisse le bouton dans ta barre des favoris.";
+    var bm="javascript:"+encodeURIComponent(js.trim());
+    drag.href=bm;
+    code.value=bm;
+    statut.textContent="Prêt — fais glisser le bouton dans ta barre de favoris.";
   })
   .catch(function(e){
-    statut.className = "erreur";
-    statut.textContent = "Erreur lors du chargement du code : " + e.message;
+    statut.className="erreur";
+    statut.textContent="Erreur de chargement : "+e.message;
   });
 
-copyBtn.addEventListener("click", function(){
-  if(!code.value || code.value === "") return;
+copyBtn.addEventListener("click",function(){
+  if(!code.value)return;
   navigator.clipboard.writeText(code.value).then(function(){
-    copyBtn.textContent = "Copié ✓";
-    setTimeout(function(){ copyBtn.textContent = "Copier le code"; }, 2000);
+    copyBtn.textContent="Copié ✓";
+    setTimeout(function(){copyBtn.textContent="Copier le code";},2000);
   });
 });
 </script>
