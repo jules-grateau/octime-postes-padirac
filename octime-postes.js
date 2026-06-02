@@ -50,7 +50,7 @@
   function rendre(){
     var idx=+sel.value,f=(p.querySelector("#octp-filtre").value||"").toLowerCase(),g={};
     P.L.forEach(function(l){var c=l.codes[idx];if(c===undefined)return;var cat=categorie(c);(g[cat]=g[cat]||[]).push({nom:N[l.mat]||l.mat,code:c});});
-    Object.keys(g).forEach(function(k){g[k].sort(function(a,b){return a.nom.localeCompare(b.nom,"fr");});});
+    Object.keys(g).forEach(function(k){var byCode=ANNEXES_SOUS.indexOf(k)!==-1;g[k].sort(function(a,b){return byCode?(a.code.localeCompare(b.code)||a.nom.localeCompare(b.nom,"fr")):a.nom.localeCompare(b.nom,"fr");});});
     function filtres(cat){return(g[cat]||[]).filter(function(x){return!f||x.nom.toLowerCase().indexOf(f)!==-1;});}
     function superGroupe(label,sous,showCode){
       var visible=sous.filter(function(c){return filtres(c).length>0;});
