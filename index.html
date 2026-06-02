@@ -102,10 +102,17 @@ var code=document.getElementById("code");
 var statut=document.getElementById("statut");
 var copyBtn=document.getElementById("copy");
 
+// Encode seulement les caractères qui cassent le parsing URL
+// (espace, ?, %, #, &, et les non-ASCII) — réduit la taille vs encodeURIComponent
+function encodeBookmarklet(js){
+  var min=js.split("\n").map(function(l){return l.trim();}).filter(Boolean).join("");
+  return "javascript:"+min.replace(/[ ?%#&-￿]/g,encodeURIComponent);
+}
+
 fetch("octime-postes.js?v="+Date.now())
   .then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.text();})
   .then(function(js){
-    var bm="javascript:"+encodeURIComponent(js.trim());
+    var bm=encodeBookmarklet(js);
     drag.href=bm;
     code.value=bm;
     statut.textContent="Prêt — fais glisser le bouton dans ta barre de favoris.";
@@ -115,12 +122,35 @@ fetch("octime-postes.js?v="+Date.now())
     statut.textContent="Erreur de chargement : "+e.message;
   });
 
+// Sélectionner le textarea au tap (mobile : copie manuelle possible)
+code.addEventListener("click",function(){
+  this.select();
+  this.setSelectionRange(0,99999);
+});
+
 copyBtn.addEventListener("click",function(){
   if(!code.value)return;
-  navigator.clipboard.writeText(code.value).then(function(){
-    copyBtn.textContent="Copié ✓";
-    setTimeout(function(){copyBtn.textContent="Copier le code";},2000);
-  });
+  function ok(){copyBtn.textContent="Copié ✓";setTimeout(function(){copyBtn.textContent="Copier le code";},2000);}
+  function selectionner(){
+    code.removeAttribute("readonly");
+    code.focus();
+    code.select();
+    code.setSelectionRange(0,99999);
+  }
+  // Essai 1 : API clipboard moderne
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(code.value).then(ok).catch(function(){
+      // Essai 2 : execCommand (iOS/Android anciens)
+      selectionner();
+      try{if(document.execCommand("copy"))ok();}catch(e){}
+      code.setAttribute("readonly","");
+    });
+  } else {
+    // Essai 2 direct
+    selectionner();
+    try{if(document.execCommand("copy"))ok();}catch(e){}
+    code.setAttribute("readonly","");
+  }
 });
 </script>
 </body></html>

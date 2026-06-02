@@ -128,7 +128,6 @@
     var empData=null;
     for(var i=0;i<P.L.length;i++){if(P.L[i].mat===mat){empData=P.L[i];break;}}
     if(!empData){resultat.innerHTML='<p>Données introuvables.</p>';return;}
-    // Grouper par section parente, puis par code exact
     var parParent={};
     for(var d=0;d<P.nb;d++){
       var code=empData.codes[d]||"";
