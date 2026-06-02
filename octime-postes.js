@@ -46,7 +46,15 @@
   document.body.appendChild(p);
   var N=noms(),P=planning();
   var sel=p.querySelector("#octp-jour");
-  function remplirJours(){sel.innerHTML="";for(var i=0;i<P.nb;i++){var o=document.createElement("option");o.value=i;o.textContent=lbl(P.dd,i);sel.appendChild(o);}}
+  function defaultJour(){
+    if(!P.dd)return 0;
+    var today=new Date();
+    if(today.getFullYear()===P.dd.getFullYear()&&today.getMonth()===P.dd.getMonth()){
+      return Math.max(0,Math.min(today.getDate()-P.dd.getDate(),P.nb-1));
+    }
+    return 0;
+  }
+  function remplirJours(){sel.innerHTML="";for(var i=0;i<P.nb;i++){var o=document.createElement("option");o.value=i;o.textContent=lbl(P.dd,i);sel.appendChild(o);}sel.value=defaultJour();}
   function rendre(){
     var idx=+sel.value,f=(p.querySelector("#octp-filtre").value||"").toLowerCase(),g={};
     P.L.forEach(function(l){var c=l.codes[idx];if(c===undefined)return;var cat=categorie(c);(g[cat]=g[cat]||[]).push({nom:N[l.mat]||l.mat,code:c});});
